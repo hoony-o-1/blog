@@ -1,0 +1,65 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import DevLogTimeline from '../components/DevLogTimeline.astro';
+import Base from './Base.astro';
+
+type Props = {
+	project: CollectionEntry<'projects'>;
+	relatedPosts?: CollectionEntry<'blog'>[];
+};
+
+const { project, relatedPosts = [] } = Astro.props;
+const { title, description, period, status, stack, links } = project.data;
+
+const statusLabel: Record<typeof status, string> = {
+	idea: '구상',
+	wip: '진행 중',
+	shipped: '배포됨',
+	paused: '잠정 중단',
+};
+---
+
+<Base title={`${title} · 프로젝트`} description={description}>
+	<article class="prose prose-sm prose-neutral max-w-none font-sans prose-headings:font-sans prose-headings:text-ink prose-headings:font-semibold prose-p:text-ink/90 prose-a:text-accent prose-code:font-mono prose-pre:bg-ink prose-pre:text-sub">
+		<p class="text-[13px] tabular-nums text-ink-sub">{period}</p>
+		<div class="not-prose mb-5 flex flex-wrap items-center gap-2">
+			<span class="rounded-full border border-accent/40 bg-accent/10 px-2.5 py-0.5 text-[11px] font-medium text-accent">
+				{statusLabel[status]}
+			</span>
+			{
+				stack?.map((s) => (
+					<span class="rounded-full bg-sub px-2.5 py-0.5 text-[11px] text-ink-sub">{s}</span>
+				))
+			}
+		</div>
+		<h1 class="not-prose mb-1.5 text-[1.375rem] font-semibold leading-snug tracking-tight text-ink sm:text-2xl">
+			{title}
+		</h1>
+		<p class="not-prose text-[14px] leading-relaxed text-ink-sub">{description}</p>
+		{
+			links && links.length > 0 && (
+				<ul class="not-prose mt-5 flex flex-wrap gap-3 text-[13px]">
+					{links.map((link) => (
+						<li>
+							<a
+								href={link.href}
+								class="text-accent underline decoration-accent/30 underline-offset-4 hover:decoration-accent"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								{link.label}
+							</a>
+						</li>
+					))}
+				</ul>
+			)
+		}
+		<div class="mt-8 border-t border-ink/10 pt-8">
+			<slot />
+		</div>
+		{relatedPosts.length > 0 && <DevLogTimeline posts={relatedPosts} />}
+	</article>
+	<p class="mt-10 text-[13px]">
+		<a href="/#projects" class="text-accent hover:underline">← 프로젝트 목록으로</a>
+	</p>
+</Base>

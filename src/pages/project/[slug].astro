@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+
+export async function getStaticPaths() {
+	const projects = await getCollection('projects');
+	const allPosts = await getCollection('blog');
+
+	return projects.map((project) => {
+		const relatedPosts = allPosts
+			.filter((post) => post.data.project === project.slug)
+			.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+		return {
+			params: { slug: project.slug },
+			props: { project, relatedPosts },
+		};
+	});
+}
+
+const { project, relatedPosts } = Astro.props;
+const { Content } = await project.render();
+---
+
+<ProjectDetail project={project} relatedPosts={relatedPosts}>
+	<Content />
+</ProjectDetail>

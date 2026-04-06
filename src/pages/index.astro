@@ -1,0 +1,138 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+
+const projectTitleBySlug = Object.fromEntries(projects.map((p) => [p.slug, p.data.title]));
+
+const fmt = new Intl.DateTimeFormat('ko-KR', {
+	year: 'numeric',
+	month: 'short',
+	day: 'numeric',
+});
+
+const growthLabel = {
+	seed: '씨앗',
+	sprout: '새싹',
+	branch: '가지',
+	tree: '나무',
+} as const;
+
+const projectStatusLabel = {
+	idea: '구상',
+	wip: '진행 중',
+	shipped: '배포됨',
+	paused: '잠정 중단',
+} as const;
+
+const statusBadgeClass = {
+	wip: 'border-accent/40 bg-accent/10 text-accent',
+	shipped: 'border-emerald-600/30 bg-emerald-50 text-emerald-800',
+	idea: 'border-zinc-300 bg-zinc-100 text-zinc-600',
+	paused: 'border-amber-500/40 bg-amber-50 text-amber-900',
+} as const;
+---
+
+<Base title="활자 정원" description="을목 블로그 — 더미 글로 미리보기">
+	<div class="mb-10">
+		<h1 class="text-[1.625rem] font-semibold tracking-tight text-ink sm:text-[1.75rem]">활자 정원</h1>
+		<p class="mt-2 max-w-xl text-[14px] leading-relaxed text-ink-sub">
+			타이포그래피를 중심에 둔 기록 공간입니다. 아래는 로컬에서 살펴보기 위한 더미 프로젝트와 글입니다.
+		</p>
+	</div>
+
+	<section id="projects" class="mb-14 scroll-mt-20" aria-labelledby="projects-heading">
+		<h2 id="projects-heading" class="text-[1.125rem] font-semibold text-ink">
+			프로젝트
+		</h2>
+		<p class="mt-1.5 text-[13px] leading-snug text-ink-sub">
+			진행 중인 작업을 한눈에 — 카드에서 상태·기간·스택을 빠르게 확인할 수 있습니다.
+		</p>
+		<div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+			{
+				projects.map((p) => (
+					<a
+						href={`/project/${p.slug}`}
+						class="group flex flex-col rounded-lg border border-ink/10 bg-sub/30 p-4 transition-colors hover:border-accent/30 hover:bg-sub/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+					>
+						<div class="flex flex-wrap items-start justify-between gap-2">
+							<h3 class="text-[15px] font-semibold leading-snug text-ink group-hover:text-accent sm:text-[16px]">
+								{p.data.title}
+							</h3>
+							<span
+								class={`shrink-0 rounded-full border px-2 py-0.5 text-[11px] font-medium ${statusBadgeClass[p.data.status]}`}
+							>
+								{projectStatusLabel[p.data.status]}
+							</span>
+						</div>
+						<p class="mt-1.5 text-[12px] tabular-nums text-ink-sub">{p.data.period}</p>
+						<p class="mt-2 line-clamp-2 text-[13px] leading-relaxed text-ink-sub">{p.data.description}</p>
+						{p.data.stack?.length ? (
+							<div class="not-prose mt-3 flex flex-wrap gap-1.5">
+								{p.data.stack.map((s) => (
+									<span class="rounded-full bg-surface px-2 py-0.5 text-[11px] text-ink-sub ring-1 ring-ink/10">
+										{s}
+									</span>
+								))}
+							</div>
+						) : null}
+					</a>
+				))
+			}
+		</div>
+	</section>
+
+	<section id="writing" class="scroll-mt-20" aria-labelledby="writing-heading">
+		<h2 id="writing-heading" class="text-[1.125rem] font-semibold text-ink">
+			글
+		</h2>
+		<p class="mt-1.5 text-[13px] text-ink-sub">날짜순 기록 (최신이 위). 프로젝트와 연결된 글은 개발 기록으로 표시됩니다.</p>
+		<ul class="mt-6 space-y-0 divide-y divide-ink/10 border-t border-ink/10">
+			{
+				posts.map((post) => (
+					<li>
+						<a
+							href={`/blog/${post.slug}`}
+							class="group block py-5 transition-colors hover:bg-sub/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+						>
+							<div class="flex flex-col gap-1.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+								<h2 class="text-[15px] font-semibold text-ink group-hover:text-accent sm:text-[16px]">
+									{post.data.title}
+								</h2>
+								<time
+									class="shrink-0 text-[12px] tabular-nums text-ink-sub"
+									datetime={post.data.pubDate.toISOString()}
+								>
+									{fmt.format(post.data.pubDate)}
+								</time>
+							</div>
+							<p class="mt-1.5 text-[13px] leading-relaxed text-ink-sub">{post.data.description}</p>
+							<div class="not-prose mt-2 flex flex-wrap items-center gap-2">
+								{post.data.project && projectTitleBySlug[post.data.project] ? (
+									<>
+										<span class="rounded-full border border-ink/15 bg-sub px-2.5 py-0.5 text-[11px] font-medium text-ink-sub">
+											개발 기록
+										</span>
+										<span class="rounded-full bg-sub px-2.5 py-0.5 text-[11px] text-ink-sub">
+											{projectTitleBySlug[post.data.project]}
+										</span>
+									</>
+								) : null}
+								{post.data.growth ? (
+									<span class="rounded-full border border-accent/40 bg-accent/10 px-2.5 py-0.5 text-[11px] font-medium text-accent">
+										{growthLabel[post.data.growth]}
+									</span>
+								) : null}
+							</div>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+</Base>
