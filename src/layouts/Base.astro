@@ -4,7 +4,7 @@ interface Props {
 	description?: string;
 }
 
-const { title, description = '을목 블로그 — 활자 정원' } = Astro.props;
+const { title, description = '을목 블로그 — hoony.land' } = Astro.props;
 ---
 
 <!doctype html>
@@ -32,21 +32,22 @@ const { title, description = '을목 블로그 — 활자 정원' } = Astro.prop
 			본문으로 건너뛰기
 		</a>
 		<header class="border-b border-ink/10 bg-sub/80 backdrop-blur-sm">
-			<div class="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6">
+			<div class="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6 lg:max-w-5xl lg:px-8">
 				<a href="/" class="text-[17px] font-semibold tracking-tight text-ink hover:text-accent">
-					활자 정원
+					hoony.land
 				</a>
 				<nav class="flex gap-3 text-[13px] text-ink-sub" aria-label="주요 메뉴">
 					<a href="/#writing" class="hover:text-ink">글</a>
 					<a href="/#projects" class="hover:text-ink">프로젝트</a>
+					<a href="/about" class="hover:text-ink">소개</a>
 				</nav>
 			</div>
 		</header>
-		<main id="main" class="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10">
+		<main id="main" class="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10 lg:max-w-5xl lg:px-8">
 			<slot />
 		</main>
 		<footer class="border-t border-ink/10 bg-sub/50 py-6 text-center text-[13px] text-ink-sub">
-			<p>을목 · 타이포그래피 중심 블로그 (더미 데이터로 구성됨)</p>
+			<p>만드는 삶</p>
 		</footer>
 	</body>
 </html>

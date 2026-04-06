@@ -38,14 +38,7 @@ const statusBadgeClass = {
 } as const;
 ---
 
-<Base title="활자 정원" description="을목 블로그 — 더미 글로 미리보기">
-	<div class="mb-10">
-		<h1 class="text-[1.625rem] font-semibold tracking-tight text-ink sm:text-[1.75rem]">활자 정원</h1>
-		<p class="mt-2 max-w-xl text-[14px] leading-relaxed text-ink-sub">
-			타이포그래피를 중심에 둔 기록 공간입니다. 아래는 로컬에서 살펴보기 위한 더미 프로젝트와 글입니다.
-		</p>
-	</div>
-
+<Base title="hoony.land" description="">
 	<section id="projects" class="mb-14 scroll-mt-20" aria-labelledby="projects-heading">
 		<h2 id="projects-heading" class="text-[1.125rem] font-semibold text-ink">
 			프로젝트
@@ -53,7 +46,7 @@ const statusBadgeClass = {
 		<p class="mt-1.5 text-[13px] leading-snug text-ink-sub">
 			진행 중인 작업을 한눈에 — 카드에서 상태·기간·스택을 빠르게 확인할 수 있습니다.
 		</p>
-		<div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+		<div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 			{
 				projects.map((p) => (
 					<a

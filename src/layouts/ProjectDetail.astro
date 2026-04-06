@@ -54,7 +54,7 @@ const statusLabel: Record<typeof status, string> = {
 				</ul>
 			)
 		}
-		<div class="mt-8 border-t border-ink/10 pt-8">
+		<div class="mt-8 max-w-3xl border-t border-ink/10 pt-8">
 			<slot />
 		</div>
 		{relatedPosts.length > 0 && <DevLogTimeline posts={relatedPosts} />}

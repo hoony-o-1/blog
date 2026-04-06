@@ -23,7 +23,7 @@ const fmt = new Intl.DateTimeFormat('ko-KR', {
 });
 ---
 
-<Base title={`${title} · 활자 정원`} description={description}>
+<Base title={`${title} · hoony.land`} description={description}>
 	<article class="prose prose-sm prose-neutral max-w-none font-sans prose-headings:font-sans prose-headings:text-ink prose-headings:font-semibold prose-p:text-ink/90 prose-a:text-accent prose-code:font-mono prose-pre:bg-ink prose-pre:text-sub">
 		<p class="text-[13px] tabular-nums text-ink-sub">
 			<time datetime={pubDate.toISOString()}>{fmt.format(pubDate)}</time>
@@ -54,7 +54,7 @@ const fmt = new Intl.DateTimeFormat('ko-KR', {
 			{title}
 		</h1>
 		<p class="not-prose text-[14px] leading-relaxed text-ink-sub">{description}</p>
-		<div class="mt-8 border-t border-ink/10 pt-8">
+		<div class="mt-8 max-w-3xl border-t border-ink/10 pt-8">
 			<slot />
 		</div>
 	</article>
